@@ -25,7 +25,7 @@
 				//Init workspace models
 				var workspaces = [];
 				for (var i=0;i<payload.workspaces.length;i++) {
-					var workspace = new AWM.Workspace(payload.workspaces[i].id, payload.workspaces[i].name);
+					var workspace = new AWM.Workspace(payload.workspaces[i].gid, payload.workspaces[i].name);
 					workspaces.push(workspace);
 				}
 
@@ -33,7 +33,7 @@
 				var photo = new AWM.Photo().initFromPayload(payload.photo);
 
 				//Finally, create a user instance
-				var AWMUser = new AWM.User(payload.id,payload.name,payload.email,photo,workspaces);
+				var AWMUser = new AWM.User(payload.gid,payload.name,payload.email,photo,workspaces);
 				this.userService.setUser(AWMUser);
 
 				this.asanaService.ready = true;

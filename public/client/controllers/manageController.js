@@ -68,11 +68,11 @@
 				var AWMProjectsArray = [];
 				for (var i=0;i<projects.length;i++){
 
-					var project = new AWM.Project(projects[i].id,projects[i].name);
+					var project = new AWM.Project(projects[i].gid,projects[i].name);
 
 					if (projects[i].webhook != null) {
 						var webhook = new AWM.Webhook()
-							.setId(projects[i].webhook.id)
+							.setId(projects[i].webhook.gid)
 							.setActive(projects[i].webhook.active)
 							.setResource(projects[i].webhook.resource)
 							.setTarget(projects[i].webhook.target);
@@ -105,7 +105,7 @@
 			.then(function(response){
 				var webhook = response.data;
 				var webhookObject = new AWM.Webhook()
-					.setId(webhook.id)
+					.setId(webhook.gid)
 					.setActive(webhook.active)
 					.setResource(webhook.resource)
 					.setTarget(webhook.target);
