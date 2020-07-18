@@ -26,7 +26,7 @@ class EventsController extends AWMController {
 			if (this.request().get('X-Hook-Secret') != null) return this.handshake();
 			else if (this.request().get('X-Hook-Signature') != null) return this.handle();
 			else return this.reply(403, {});
-		} catch(err){
+		} catch (err) {
 			return this.reply(200, {})
 		}
 	}
@@ -99,7 +99,6 @@ class EventsController extends AWMController {
 										for (var j = 0; j < tags.length; j++) {
 											var t = tags[j].name;
 											if (isInt(t)) {
-												console.log("O ID do produto é : " + t);
 												Produto.findById(t, function (err, produto) {
 													if (err) {
 														console.log('Ocorreu um erro ao buscar o Produto');
@@ -108,9 +107,25 @@ class EventsController extends AWMController {
 															var p = new Produto(produto[0]);
 															var asanaTask = new AsanaTaskExcheduler(result, p.id);
 															console.log(asanaTask);
-															AsanaTaskExcheduler.create(asanaTask, function (err, task) {
-																console.log(err);
-																console.log(task);
+															AsanaTaskExcheduler.findByTask(asanaTask.task_id, function (erro, respTask) {
+																console.log('resp task')
+																console.log(respTask);
+																if (erro) {
+																	console.log('Ocorreu um erro durante o processamento da requisição');
+																} else if (respTask.length > 0 && respTask != null) {
+																	console.log('Tarefa ja cadastrada no banco');
+																	AsanaTaskExcheduler.update(respTask[0].id, asanaTask, function (erroUpdate, taskUpdate) {
+																		console.log("Atualizando task");
+																		console.log(erroUpdate);
+																		console.log(taskUpdate);
+																	})
+																} else {
+																	console.log("Salvando nova task");
+																	AsanaTaskExcheduler.create(asanaTask, function (err, task) {
+																		console.log(err);
+																		console.log(task);
+																	});
+																}
 															});
 														} else {
 															console.log('Produto não encontrado na base!');

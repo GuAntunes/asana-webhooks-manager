@@ -37,5 +37,28 @@ AsanaTaskExcheduler.create = function (task, result) {
     });
 };
 
+AsanaTaskExcheduler.update = function (id, task, result) {
+    dbConn.query("UPDATE asana_task SET ? WHERE id = ?", [task, id], function (err, res) {
+        if (err) {
+            console.log("error: ", err);
+            result(null, err);
+        } else {
+            result(null, res);
+        }
+    });
+};
+
+AsanaTaskExcheduler.findByTask = function (id, result) {
+    dbConn.query("Select * from asana_task where task_id = ? ", id, function (err, res) {
+        if (err) {
+            console.log("error: ", err);
+            result(err, null);
+        }
+        else {
+            result(null, res);
+        }
+    });
+};
+
 
 module.exports = AsanaTaskExcheduler;
