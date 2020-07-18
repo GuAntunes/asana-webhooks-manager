@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser')
 const registerRoutes = require('./routes');
+
 var app = express();
 var server = null;
 var io;

@@ -2,13 +2,16 @@ const express = require('express');
 const EventsController = require('../controllers/EventsController');
 var eventsCtrl = null;
 
-var registerRoutes = function(app,io){
+const Produto = require('../models/produto');
+const AsanaTaskExcheduler = require('../models/asanaTaskExcheduler');
+
+var registerRoutes = function (app, io) {
 
 	var router = express.Router();
 
-	router.all('/*',function(req,res,next){
+	router.all('/*', function (req, res, next) {
 
-		eventsCtrl = new EventsController(req,res,io);
+		eventsCtrl = new EventsController(req, res, io);
 
 		if (eventsCtrl instanceof EventsController) {
 			next();
@@ -16,8 +19,8 @@ var registerRoutes = function(app,io){
 
 	});
 
-	router.post('/incoming/:resourceId',function(req,res,next){
-
+	router.post('/incoming/:resourceId', function (req, res, next) {
+		console.log("recebendo informação");
 		return eventsCtrl.onIncomingEvents();
 
 	});
