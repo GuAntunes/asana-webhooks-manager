@@ -79,11 +79,12 @@ class EventsController extends AWMController {
 
 	enviarExcheduler(eventsArray) {
 		try {
+			console.log(eventsArray);
 			console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 			for (var i = 0; i < eventsArray.length; i++) {
 				//Verifica a section onde a task foi adicionada
 				//TODO: Realizar o tratamento dessa informação de section através de arquivo de configuração
-				if (eventsArray[i].parent.resource_type == 'section' && isDefinedSection(eventsArray[i].parent.gid)) {
+				if ((eventsArray[i].parent.resource_type == 'section' && isDefinedSection(eventsArray[i].parent.gid)) || eventsArray[i].parent.resource_type == 'tag') {
 					console.log('Is a section Faturar');
 					var token = asanaConfig.token;
 					if (token) {

@@ -6,12 +6,13 @@ var dbConn = require('./../config/db.config');
 //AsanaTaskExcheduler object create
 var AsanaTaskExcheduler = function (task, product_id) {
     this.task_id = task.gid;
-    this.created_at = task.created_at;
+    this.created_at_asana = task.created_at;
     this.completed_at = task.completed_at;
     this.completed = task.completed;
-    this.modified_at = task.modified_at;
+    this.modified_at_asana = task.modified_at;
     this.task_name = task.name;
     this.product_id = product_id;
+
     if (task.memberships.length > 0) {
         if (task.memberships[0].section) {
             this.section_id = task.memberships[0].section.gid;
@@ -22,6 +23,7 @@ var AsanaTaskExcheduler = function (task, product_id) {
             this.project_name = task.memberships[0].project.name;
         }
     }
+    this.link_asana = "https://app.asana.com/0/" + this.project_id + "/" + this.task_id;
 };
 
 AsanaTaskExcheduler.create = function (task, result) {
