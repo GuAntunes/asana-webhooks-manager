@@ -19,36 +19,36 @@ $ sudo apt install -y mongodb
 ##### 2. Creating an Asana App
 ###### 2.1 Realize o login no asana selecione **Minhas configurações de perfil** no menu superior direito
 
-{img_01}
+(public/img/documentation/img_01.png)
 
 ###### 2.2 Selecione na aba **Aplicativos** a opção **Gerenciar aplicativos de desenvolvedor**
 
-{img_02}
+(public/img/documentation/img_02.png)
 
 ###### 2.3 Selecione a opção **Novo aplicativo**
-{img_03}
+(public/img/documentation/img_03.png)
 
 ###### 2.4 Digite o nome do aplicativo e clique em **Criar aplicativo**
-{img_04}
+(public/img/documentation/img_04.png)
 
 ###### 2.5 Neste momento é apresentado na tela o **client_id** e **client_secret** que será utilizado na aplicação, digite no campo **URLs de redirecionamento** - > "https://{host}/oauth/asana" e clique no botão adicionar **adicionar**
-{img_05}
+(public/img/documentation/img_05.png)
 
 ###### 2.6 Na aba de **Configurações** digite no campo **Site do aplicativo** - > "https://{host}"
-{img_06}
+(public/img/documentation/img_06.png)
 
 ##### 3. Criação do token de acesso
 ###### 3.1 Na tela de gerenciamento de aplicativos selecione a opção **Novo token de acesso**
 
-{img_07}
+(public/img/documentation/img_07.png)
 
 ###### 3.2 Digite o nome do token e clique no botão **Criar token**
 
-{img_08}
+(public/img/documentation/img_08.png)
 
 ###### 3.3 Neste momento é gerado o token para acessar a API do Asana, copie e guarde este token pois será utilizado na aplicação.
 
-{img_09}
+(public/img/documentation/img_09.png)
 
 ##### 4. Atualizando configurações
 ###### 4.1 O Asana Webhooks Manager usa o fluxo OAuth do Asana para permitir que você "Entre com o Asana".
@@ -131,6 +131,6 @@ $ node server.js
   }
 }
 ```
-{img_10}
+(public/img/documentation/img_10.png)
 
 
