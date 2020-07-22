@@ -4,9 +4,9 @@ Sistema criado com a finalidade de gerenciar os eventos de webhooks gerados pelo
 
 ### Installation
 
-Asana Webhooks Manager requires [Node.js](https://nodejs.org/) v6.9+ and [Mongo.db](https://www.mongodb.com/) to run.
+Asana Webhooks Manager requer [Node.js](https://nodejs.org/) v6.9+ and [Mongo.db](https://www.mongodb.com/) para rodar.
 
-##### 1. Install the dependencies
+##### 1. Instalar dependências
 
 
 ```sh
@@ -16,7 +16,7 @@ $ sudo apt install npm
 $ sudo apt install npm
 $ sudo apt install -y mongodb
 ```
-##### 2. Creating an Asana App
+##### 2.Criando um Asana App
 ###### 2.1 Realize o login no asana selecione **Minhas configurações de perfil** no menu superior direito
 
 ![alt text](public/img/documentation/img_01.png)
