@@ -19,7 +19,7 @@ $ sudo apt install -y mongodb
 ##### 2. Creating an Asana App
 ###### 2.1 Realize o login no asana selecione **Minhas configurações de perfil** no menu superior direito
 
-(public/img/documentation/img_01.png)
+![alt text](public/img/documentation/img_01.png)
 
 ###### 2.2 Selecione na aba **Aplicativos** a opção **Gerenciar aplicativos de desenvolvedor**
 
