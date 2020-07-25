@@ -22,10 +22,13 @@ var registerRoutes = function (app, io) {
 
 	});
 
+	router.post('/sync', function (req, res, next) {
+		console.log("Sincronizando informações");
+		return eventsCtrl.synchronizedSection();
+	});
+
 	app.use('/events', router);
 
 };
-
-
 
 module.exports = registerRoutes;

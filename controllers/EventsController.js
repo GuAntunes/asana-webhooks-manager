@@ -47,9 +47,6 @@ class EventsController extends AWMController {
 				return this.reply(200, {});
 			}.bind(this))
 			.catch();
-
-
-
 	}
 
 	handle() {
@@ -79,7 +76,6 @@ class EventsController extends AWMController {
 
 	enviarExcheduler(eventsArray) {
 		try {
-			console.log(eventsArray);
 			console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 			for (var i = 0; i < eventsArray.length; i++) {
 				//Verifica a section onde a task foi adicionada
@@ -93,50 +89,7 @@ class EventsController extends AWMController {
 						if (client && taskGid) {
 							client.tasks.findById(taskGid)
 								.then((result) => {
-									if (result) {
-										//Obtem as tags da task
-										var tags = result.tags;
-										//Realiza a identificação de alguma tag que seja um número inteiro
-										for (var j = 0; j < tags.length; j++) {
-											var t = tags[j].name;
-											if (isInt(t)) {
-												Produto.findById(t, function (err, produto) {
-													if (err) {
-														console.log('Ocorreu um erro ao buscar o Produto');
-													} else {
-														if (produto.length > 0) {
-															var p = new Produto(produto[0]);
-															var asanaTask = new AsanaTaskExcheduler(result, p.id);
-															console.log(asanaTask);
-															AsanaTaskExcheduler.findByTask(asanaTask.task_id, function (erro, respTask) {
-																console.log('resp task')
-																console.log(respTask);
-																if (erro) {
-																	console.log('Ocorreu um erro durante o processamento da requisição');
-																} else if (respTask.length > 0 && respTask != null) {
-																	console.log('Tarefa ja cadastrada no banco');
-																	AsanaTaskExcheduler.update(respTask[0].id, asanaTask, function (erroUpdate, taskUpdate) {
-																		console.log("Atualizando task");
-																		console.log(erroUpdate);
-																		console.log(taskUpdate);
-																	})
-																} else {
-																	console.log("Salvando nova task");
-																	AsanaTaskExcheduler.create(asanaTask, function (err, task) {
-																		console.log(err);
-																		console.log(task);
-																	});
-																}
-															});
-														} else {
-															console.log('Produto não encontrado na base!');
-														}
-													}
-												});
-												break;
-											}
-										}
-									}
+									saveTaskWithTagIdProduct(result);
 								});
 						}
 					}
@@ -151,10 +104,110 @@ class EventsController extends AWMController {
 
 	}
 
+	synchronizedSection() {
+		var sections = getAllMonitoredSections();
+		var token = asanaConfig.token;
+		if (token && sections && sections != []) {
+			sections.forEach(section => {
+				const client = asana.Client.create().useAccessToken(token);
+				findTasksBySection(client, section, {}, 0);
+			});
+		}
+		return this.reply(200, {});
+	}
+
+}
+
+function findTasksBySection(client, section, params = {}, level) {
+	params.opt_pretty = true;
+	params.limit = 20;
+	client.tasks.getTasksForSection(section, params)
+		.then((result) => {
+			if (result) {
+				//Obtem as tags da task
+				var tasks = result.data;
+				tasks.forEach(t => {
+					client.tasks.findById(t.gid)
+						.then((task) => {
+							console.log("::::::::::::::::::::::::::::::::::::::::::::::::::::::::")
+							saveTaskWithTagIdProduct(task);
+						});
+				});
+				if (result._response.next_page && level < 10) {
+					var offset = result._response.next_page.offset;
+					if (offset) {
+						var param = {
+							offset: offset
+						}
+						setTimeout(function () {
+							level++;
+							console.log(level + " recursividade.......................................")
+							return findTasksBySection(client, section, param, level);
+						}, 60000);
+					}
+				}
+			}
+		});
+}
+
+function saveTaskWithTagIdProduct(task) {
+	if (task) {
+		//Obtem as tags da task
+		var tags = task.tags;
+		//Realiza a identificação de alguma tag que seja um número inteiro
+		for (var j = 0; j < tags.length; j++) {
+			var t = tags[j].name;
+			if (isInt(t)) {
+				Produto.findById(t, function (err, produto) {
+					if (err) {
+						console.log('Ocorreu um erro ao buscar o Produto');
+					} else {
+						if (produto.length > 0) {
+							var p = new Produto(produto[0]);
+							var asanaTask = new AsanaTaskExcheduler(task, p.id);
+							console.log(asanaTask);
+							saveTaskExcheduler(asanaTask);
+						} else {
+							console.log('Produto não encontrado na base!');
+						}
+					}
+				});
+				break;
+			}
+		}
+	}
+}
+
+function saveTaskExcheduler(asanaTask) {
+	AsanaTaskExcheduler.findByTask(asanaTask.task_id, function (erro, respTask) {
+		console.log('resp task')
+		console.log(respTask);
+		if (erro) {
+			console.log('Ocorreu um erro durante o processamento da requisição');
+		} else if (respTask.length > 0 && respTask != null) {
+			console.log('Tarefa ja cadastrada no banco');
+			AsanaTaskExcheduler.update(respTask[0].id, asanaTask, function (erroUpdate, taskUpdate) {
+				console.log("Atualizando task");
+				console.log(erroUpdate);
+				console.log(taskUpdate);
+			})
+		} else {
+			console.log("Salvando nova task");
+			AsanaTaskExcheduler.create(asanaTask, function (err, task) {
+				console.log(err);
+				console.log(task);
+			});
+		}
+	});
+
+}
+
+function getAllMonitoredSections() {
+	return exchedulerConfig.sections;
 }
 
 function isDefinedSection(value) {
-	var sections = exchedulerConfig.sections;
+	var sections = getAllMonitoredSections();
 	if (sections && sections != []) {
 		for (var i = 0; i < sections.length; i++) {
 			if (sections[i] == value) {

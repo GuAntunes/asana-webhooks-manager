@@ -16,25 +16,25 @@
   "license": "ISC",
   "homepage": "https://github.com/EyalRonel/asana-webhooks-manager#readme",
   "dependencies": {
-    "asana": "^0.15.1",
-    "body-parser": "^1.17.1",
-    "change-case": "^3.0.1",
-    "cookie-parser": "^1.4.3",
-    "crypto-js": "^3.1.9-1",
-    "express": "^4.14.1",
-    "mongoose": "^4.9.3",
+    "asana": "^0.18.4",
+    "body-parser": "^1.19.0",
+    "change-case": "^3.1.0",
+    "cookie-parser": "^1.4.5",
+    "crypto-js": "^3.3.0",
+    "express": "^4.17.1",
+    "mongoose": "^4.13.21",
     "mysql": "^2.18.1",
-    "require-dir": "^0.3.1",
-    "socket.io": "^1.7.3"
+    "require-dir": "^0.3.2",
+    "socket.io": "^1.7.4"
   },
   "devDependencies": {
-    "coveralls": "^2.13.0",
+    "coveralls": "^2.13.3",
     "expect": "^1.20.2",
     "istanbul": "^0.4.5",
-    "mocha": "^3.2.0",
-    "nock": "^9.0.9",
-    "proxyquire": "^1.7.11",
-    "sinon": "^2.0.0",
-    "supertest": "^3.0.0"
+    "mocha": "^3.5.3",
+    "nock": "^9.6.1",
+    "proxyquire": "^1.8.0",
+    "sinon": "^2.4.1",
+    "supertest": "^3.4.2"
   }
 }
