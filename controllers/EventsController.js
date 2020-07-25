@@ -129,7 +129,6 @@ function findTasksBySection(client, section, params = {}, level) {
 				tasks.forEach(t => {
 					client.tasks.findById(t.gid)
 						.then((task) => {
-							console.log("::::::::::::::::::::::::::::::::::::::::::::::::::::::::")
 							saveTaskWithTagIdProduct(task);
 						});
 				});
@@ -141,7 +140,6 @@ function findTasksBySection(client, section, params = {}, level) {
 						}
 						setTimeout(function () {
 							level++;
-							console.log(level + " recursividade.......................................")
 							return findTasksBySection(client, section, param, level);
 						}, 60000);
 					}
@@ -185,12 +183,16 @@ function saveTaskExcheduler(asanaTask) {
 		if (erro) {
 			console.log('Ocorreu um erro durante o processamento da requisição');
 		} else if (respTask.length > 0 && respTask != null) {
-			console.log('Tarefa ja cadastrada no banco');
-			AsanaTaskExcheduler.update(respTask[0].id, asanaTask, function (erroUpdate, taskUpdate) {
-				console.log("Atualizando task");
-				console.log(erroUpdate);
-				console.log(taskUpdate);
-			})
+			console.log(respTask[0].modified_at_asana);
+			console.log(asanaTask.modified_at_asana)
+			if (respTask[0].modified_at_asana != asanaTask.modified_at_asana) {
+				console.log('Tarefa ja cadastrada no banco');
+				AsanaTaskExcheduler.update(respTask[0].id, asanaTask, function (erroUpdate, taskUpdate) {
+					console.log("Atualizando task");
+					console.log(erroUpdate);
+					console.log(taskUpdate);
+				});
+			}
 		} else {
 			console.log("Salvando nova task");
 			AsanaTaskExcheduler.create(asanaTask, function (err, task) {
