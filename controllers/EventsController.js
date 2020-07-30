@@ -36,17 +36,17 @@ class EventsController extends AWMController {
 		var xHookSecret = this.request().get('X-Hook-Secret');
 
 		//Store webhook secret for validating incoming event request
-		mongodb.getConnection();
-		return new AWMWebhook({
-			resource_id: this.request().params.resourceId,
-			secret: xHookSecret
-		}).save()
-			.then(function () {
+		// mongodb.getConnection();
+		// return new AWMWebhook({
+		// 	resource_id: this.request().params.resourceId,
+		// 	secret: xHookSecret
+		// }).save()
+			// .then(function () {
 				//Response to in-flight webhook creation request
 				this.response().set('X-Hook-Secret', xHookSecret);
 				return this.reply(200, {});
-			}.bind(this))
-			.catch();
+			// }.bind(this))
+			// .catch();
 	}
 
 	handle() {
@@ -60,8 +60,8 @@ class EventsController extends AWMController {
 			if (typeof webhook == "undefined" || webhook == null || webhook.length == 0) return this.reply(400, {}, "Unknown webhook");
 			//Match encrypted request payload against header header, using secret from original webhook handshake
 			var encryptedRequestBody = CryptoJS.HmacSHA256(JSON.stringify(this.request().body), webhook.secret).toString();
-			if (xHookSignatureHeader !== encryptedRequestBody) return this.reply(403, {}, "Unauthorized request");
-			else {
+			// if (xHookSignatureHeader !== encryptedRequestBody) return this.reply(403, {}, "Unauthorized request");
+			// else {
 				//At this point the request is fully validated and can be processed
 				var eventsArray = this.request().body.events;
 				AWMEvent.insertMany(eventsArray, function (error, docs) { });
@@ -69,7 +69,7 @@ class EventsController extends AWMController {
 				this.socket.emit('events', eventsArray);
 
 				return this.reply(200, {});
-			}
+			// }
 		}.bind(this));
 
 	}
